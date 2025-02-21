@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-DIRECTORY="/home/kadva7/Documents/muni/"
+$(muni) || alias muni="./dumuni.sh"
+
+DIRECTORY="$(muni && pwd)"
 
 function _muni_du_comp() {
     local cmd="${1##*/}"  # get current command
