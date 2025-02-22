@@ -40,5 +40,5 @@ function _muni_du_comp() {
     fi
 }
 
-complete -d -X '.[^./]?' -F _muni_du_comp muni
+complete -X '.[^./]*' -F _muni_du_comp muni
 
