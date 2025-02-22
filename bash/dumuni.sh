@@ -37,6 +37,8 @@ if [ -d "$maindir" ]; then
         ls -ahil "$maindir"
     elif [ "$2" = "o" ] || [ "$2" = "open" ]; then
         retGarbage=($($FMAN "$maindir" -- 2>&- 2<&-)) & disown
+    elif [ "$2" = "l" ] || [ "$2" = "list" ]; then
+        ll "$maindir"
     else
         cd "${maindir}"
     fi
