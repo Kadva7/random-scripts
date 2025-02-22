@@ -9,7 +9,7 @@ FMAN=($(xdg-mime query default inode/directory | sed 's/.desktop//'))
 #   > $1 - none | subject code | "open"
 #   > $2 - none | "du" | "files" | "f" | "open" | o
 
-ll >/dev/null || alias ll='ls -lav --ignore=..'
+[ "$(alias ll 2>&-)" ] || alias ll='ls -lav --ignore=..'
 
 subject="$1"
 year_now="$(date +%Y)"
