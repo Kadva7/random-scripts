@@ -2,7 +2,16 @@
 
 
 # main directory const
-munidir="/home/kadva7/Documents/muni/"
+function _muni_get_directory() {
+    [ -f '~/.config/muni-script' ] && echo "$(cat "~/.config/muni-script")" && return 0
+
+    # constant
+    local DIR="/home/kadva7/Documents/muni/"
+    echo "$DIR" > ~/.config/muni-script
+    echo "$DIR"
+}
+
+munidir="$(_muni_get_directory)"
 FMAN=($(xdg-mime query default inode/directory | sed 's/.desktop//'))
 
 # possible arguments:
