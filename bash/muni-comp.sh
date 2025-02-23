@@ -23,18 +23,18 @@ function _muni_du_comp() {
 
     if [ -n "$sarg" ]; then
         for cmd in $clistsub; do
-            [ "$sarg" = "$cmd" ] && return 0
+            [[ "$sarg" = "$cmd" ]] && return 0
         done
     fi
 
     if [ -n "$farg" ]; then
         for cmd in $clistmain; do
-            [ "$farg" = "$cmd" ] && return 0
+            [[ "$farg" = "$cmd" ]] && return 0
         done
     fi
 
     if [[ -n "$sarg" ]] && [[ -d "${m_dir}$last" ]]; then
-        COMPREPLY=($(cd "${m_dir}$last" && compgen -d -f -W "du o open list" -- "${word}"))
+        COMPREPLY=($(cd "${m_dir}$last" && compgen -d -f -W "du o open l list f files vscode" -- "${word}"))
     else
         COMPREPLY=($(cd "$m_dir" && compgen -d -W "open " -- "${word}"))
     fi
