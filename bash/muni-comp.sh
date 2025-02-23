@@ -19,7 +19,7 @@ function _muni_du_comp() {
     # cd "/home/kadva7/Documents/muni"
     local m_dir="$(_muni_get_directory)"
     local clistmain=("open")
-    local clistsub=("open" "du" "list" "files")
+    local clistsub=("open" "du" "list" "files" "vscode")
 
     if [ -n "$sarg" ]; then
         for cmd in $clistsub; do
