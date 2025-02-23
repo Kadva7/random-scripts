@@ -48,7 +48,7 @@ if [[ -d "$maindir" ]]; then
         if [[ ${#workspaces[@]} -eq 0 ]]; then
             echo "No VS Code workspaces found in subject directory!"
         elif [[ ${#workspaces[@]} -eq 1 ]]; then
-            cd "${maindir}" && bash -c vscodium "${workspaces[0]}" & disown
+            vscodium "${maindir}${workspaces[0]}"
         else
             echo "Multiple workspaces found!"
             local i=0
@@ -62,8 +62,8 @@ if [[ -d "$maindir" ]]; then
                 elif [[ $num -lt 0 ]] || [[ $num -gt $((i - 1)) ]]; then
                     echo "Number must be between the possible value!"
                 else
-                    bash -c vscodium "${workspaces[num]}" & disown
-                    return 0
+                    vscodium "${workspaces[num]}"
+                    break
                 fi
             done
         fi
