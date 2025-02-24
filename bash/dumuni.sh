@@ -51,18 +51,18 @@ if [[ -d "$maindir" ]]; then
             vscodium "${maindir}${workspaces[0]}"
         else
             echo "Multiple workspaces found!"
-            local i=0
-            for elem in $workspaces; do
+            i=0
+            for elem in ${workspaces[*]}; do
                 echo "[$i] $elem"
                 i=$((i + 1))
             done
-            while (read -p "Enter a number between 0 and $((i - 1))" num); do
+            while read -p "Enter a number between 0 and $((i - 1)): " num; do
                 if ! [[ $num == +([0-9]) ]]; then
                     echo "Input must be a non-negative integer!"
                 elif [[ $num -lt 0 ]] || [[ $num -gt $((i - 1)) ]]; then
                     echo "Number must be between the possible value!"
                 else
-                    vscodium "${workspaces[num]}"
+                    vscodium "${maindir}${workspaces[num]}"
                     break
                 fi
             done
