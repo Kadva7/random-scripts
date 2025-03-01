@@ -67,8 +67,10 @@ if [[ -d "$maindir" ]]; then
                 fi
             done
         fi
-    else
+    elif [[ -z "$2" ]] then
         cd "${maindir}"
+    else
+        echo "Error, invalid command!"
     fi
 elif [ "$1" = "open" ]; then
     r=$($FMAN "$munidir" -- 2>&- 2<&-) & disown
