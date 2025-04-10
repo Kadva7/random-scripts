@@ -1,28 +1,24 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
-# main directory const
-function _muni_get_directory() {
-    [ -f '~/.config/muni-script' ] && echo "$(cat "~/.config/muni-script")" && return 0
-
-    # constant
-    local DIR="/home/kadva7/Documents/muni/"
-    echo "$DIR" > ~/.config/muni-script
-    echo "$DIR"
-}
-
-munidir="$(_muni_get_directory)"
+# get directory from config
+# https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script
+# what the hell is this abomination
+SUBJECT_SCRIPT_DIR="$( dirname -- "$( readlink -f -- "$0")")"
+SUBJECTS="$("$SUBJECT_SCRIPT_DIR/"config.sh)"
+# for VS Code support
 FMAN=($(xdg-mime query default inode/directory | sed 's/.desktop//'))
+# replace with whatever editor really
 VSCODE_EDITOR_EXEC=vscodium
 
 # possible arguments:
 #   > $1 - none | subject code | "open"
 #   > $2 - none | "du" | "files" | "f" | "open" | o | "vscode"
 
-[ "$(alias ll 2>&-)" ] || alias ll='ls -lav --ignore=..'
+[[ "$(alias ll 2>&-)" ]] || alias ll='ls -lav --ignore=..'
 
-subject="$1"
+SUBJECT="$1"
 year_now="$(date +%Y)"
-maindir="${munidir}${subject}/"
+maindir="${SUBJECTS}${SUBJECT}/"
 
 if [[ -d "$maindir" ]]; then
     if [[ "$2" = du ]]; then
@@ -46,7 +42,7 @@ if [[ -d "$maindir" ]]; then
 
         workspaces=($(cd "${maindir}" && find -P -xdev -name "*.code-workspace"))
         if [[ ${#workspaces[@]} -eq 0 ]]; then
-            echo "No VS Code workspaces found in subject directory!"
+            echo "No VS Code workspaces found in $SUBJECT directory!"
         elif [[ ${#workspaces[@]} -eq 1 ]]; then
             vscodium "${maindir}${workspaces[0]}"
         else
@@ -67,13 +63,13 @@ if [[ -d "$maindir" ]]; then
                 fi
             done
         fi
-    elif [[ -z "$2" ]] then
+    elif [[ -z "$2" ]] && ! [[ "$maindir" = "${SUBJECT}/" ]]; then
         cd "${maindir}"
     else
         echo "Error, invalid command!"
     fi
-elif [ "$1" = "open" ]; then
-    r=$($FMAN "$munidir" -- 2>&- 2<&-) & disown
+elif [[ "$1" = "open" ]]; then
+    r=$($FMAN "$SUBJECTS" -- 2>&- 2<&-) & disown
 else
     echo -e "Cannot find directory for specified subject!"
 fi

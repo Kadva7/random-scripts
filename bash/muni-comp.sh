@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 
-function _muni_get_directory() {
-    [ -f '~/.config/muni-script' ] && echo "$(cat "~/.config/muni-script")" && return 0
-
-    # constant
-    local DIR="/home/kadva7/Documents/muni/"
-    echo "$DIR" > ~/.config/muni-script
-    echo "$DIR"
-}
-
 function _muni_du_comp() {
     local cmd="${1##*/}"  # get current command
     local word="${COMP_WORDS[COMP_CWORD]}"
@@ -17,7 +8,8 @@ function _muni_du_comp() {
     local last="${COMP_WORDS[COMP_CWORD - 1]}"
     local exclude="!.*"
     # cd "/home/kadva7/Documents/muni"
-    local m_dir="$(_muni_get_directory)"
+    local m_dir="$( [ -n $SUBJECTS ] && echo $SUBJECTS || cat ~/.config/muni-script )"
+    #local m_dir="/home/kadva7/Documents/muni/" # temp fix
     local clistmain=("open")
     local clistsub=("open" "du" "list" "files" "vscode")
 
@@ -33,7 +25,7 @@ function _muni_du_comp() {
         done
     fi
 
-    if [[ -n "$sarg" ]] && [[ -d "${m_dir}$last" ]]; then
+    if [[ -d "${m_dir}$last" ]]; then
         COMPREPLY=($(cd "${m_dir}$last" && compgen -d -f -W "du o open l list f files vscode" -- "${word}"))
     else
         COMPREPLY=($(cd "$m_dir" && compgen -d -W "open " -- "${word}"))
