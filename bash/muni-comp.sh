@@ -8,7 +8,7 @@ function _muni_du_comp() {
     local last="${COMP_WORDS[COMP_CWORD - 1]}"
     local exclude="!.*"
     # cd "/home/kadva7/Documents/muni"
-    local m_dir="$( [ -n $SUBJECTS ] && echo $SUBJECTS || cat ~/.config/muni-script )"
+    local m_dir="$( [[ $SUBJECTS ]] && echo $SUBJECTS || echo "$(~/.config/school-bash/config.sh)" )"
     #local m_dir="/home/kadva7/Documents/muni/" # temp fix
     local clistmain=("open")
     local clistsub=("open" "du" "list" "files" "vscode")

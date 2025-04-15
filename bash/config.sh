@@ -5,7 +5,7 @@
 # do stuff that is kinda unknown
 ###
 
-SUBJECTS="$( [ -n "$SUBJECTS" ] && echo "$SUBJECTS" || echo ~/.config/muni-script)"
+SUBJECTS="$( [ -n "$SUBJECTS" ] && echo "$SUBJECTS" || echo ~/.config/school-bash/muni-script)"
 
 [[ -s $SUBJECTS ]] && echo "$(cat -- "$SUBJECTS")" && exit 0
 
