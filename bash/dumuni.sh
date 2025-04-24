@@ -3,7 +3,7 @@
 # get directory from config
 # https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script
 # what the hell is this abomination
-mkdir -p "~/.config/school-bash/"
+mkdir -p "$HOME"/.config/school-bash/
 SUBJECTS="$(~/.config/school-bash/config.sh)"
 # for VS Code support
 FMAN=($(xdg-mime query default inode/directory | sed 's/.desktop//'))

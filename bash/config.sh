@@ -5,9 +5,9 @@
 # do stuff that is kinda unknown
 ###
 
-SUBJECTS="$( [ -n "$SUBJECTS" ] && echo "$SUBJECTS" || echo ~/.config/school-bash/muni-script)"
+SUBJECTS="$( [ -n "$SUBJECTS" ] && echo "$SUBJECTS" || echo "$HOME/.config/school-bash/muni-script")"
 
-[[ -s $SUBJECTS ]] && echo "$(cat -- "$SUBJECTS")" && exit 0
+[ -s $SUBJECTS ] && echo "$(cat -- "$SUBJECTS")" && exit 0
 
 while [ ! -s $SUBJECTS ] && read -p "Please type where the directory containing the subjects is (directory of them): " line
 do
@@ -15,6 +15,7 @@ do
         echo "Do you wish to set \'$line\' as the base directory? (y/N)"
         read inp
         if [[ "$inp" = "y" ]] || [[ "$inp" = "Y" ]]; then
+            mkdir -p "$(basename "$SUBJECTS")"
             echo "$line" > "$SUBJECTS"
             break
         fi
