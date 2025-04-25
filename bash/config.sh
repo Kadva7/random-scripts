@@ -5,18 +5,20 @@
 # do stuff that is kinda unknown
 ###
 
-SUBJECTS="$( [ -n "$SUBJECTS" ] && echo "$SUBJECTS" || echo "$HOME/.config/school-bash/muni-script")"
+SCHOOL_CONFIG_DIR=$([ -z "$SCHOOL_CONFIG_DIR" ] && echo "$HOME/.config/school-bash" || echo "$SCHOOL_CONFIG_DIR")
+
+SUBJECTS="$( [ -n "$SUBJECTS" ] && echo "$SUBJECTS" || echo "$SCHOOL_CONFIG_DIR/muni-script")"
 
 [ -s $SUBJECTS ] && echo "$(cat -- "$SUBJECTS")" && exit 0
 
 while [ ! -s $SUBJECTS ] && read -p "Please type where the directory containing the subjects is (directory of them): " line
 do
-    if [[ -d "$line" ]]; then
+    if [[ -d $line ]]; then
         echo "Do you wish to set \'$line\' as the base directory? (y/N)"
         read inp
-        if [[ "$inp" = "y" ]] || [[ "$inp" = "Y" ]]; then
-            mkdir -p "$(basename "$SUBJECTS")"
-            echo "$line" > "$SUBJECTS"
+        if [[ $inp = y ]] || [[ $inp = Y ]]; then
+            mkdir -p "$SCHOOL_CONFIG_DIR"
+            echo "$line" > "$SCHOOL_CONFIG_DIR/script"
             break
         fi
     else
