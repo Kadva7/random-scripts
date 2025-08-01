@@ -4,21 +4,23 @@
 # https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script
 # what the hell is this abomination
 mkdir -p "$HOME"/.config/school-bash/
-SUBJECTS="$(~/.config/school-bash/config.sh)"
+CONFIG_FILE="$(~/.config/school-bash/config.sh)"
 # for VS Code support
 FMAN=($(xdg-mime query default inode/directory | sed 's/.desktop//'))
 # replace with whatever editor really
 VSCODE_EDITOR_EXEC=vscodium
 
 # possible arguments:
-#   > $1 - none | subject code | "open"
+#   > $1 - none | subject code | "open" | "alias"
 #   > $2 - none | "du" | "files" | "f" | "open" | o | "vscode"
 
 [[ "$(alias ll 2>&-)" ]] || alias ll='ls -lav --ignore=..'
 
 SUBJECT="$1"
 year_now="$(date +%Y)"
-maindir="${SUBJECTS}${SUBJECT}/"
+maindir="${CONFIG_FILE}${SUBJECT}/"
+
+#set_aliases=$(egrep "alias ")
 
 if [[ -d "$maindir" ]]; then
     if [[ "$2" = du ]]; then
@@ -69,7 +71,9 @@ if [[ -d "$maindir" ]]; then
         echo "Error, invalid command!"
     fi
 elif [[ "$1" = "open" ]]; then
-    r=$($FMAN "$SUBJECTS" -- 2>&- 2<&-) & disown
+    r=$($FMAN "$CONFIG_FILE" -- 2>&- 2<&-) & disown
+elif [[ $1 = alias ]]; then
+    echo "AAA"
 else
     echo -e "Cannot find directory for specified subject!"
 fi
