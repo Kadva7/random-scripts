@@ -3,8 +3,15 @@
 # get directory from config
 # https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script
 # what the hell is this abomination
-mkdir -p "$HOME"/.config/school-bash/
-CONFIG_FILE="$(~/.config/school-bash/config.sh)"
+#set -e
+CONFIG_DIR="$HOME/.config/school-bash"
+#CONFIG_FILE="$($HOME/.config/school-bash/config.sh)"
+CONFIG_FILE="$CONFIG_DIR/config.conf"
+
+source "$CONFIG_FILE"
+
+MAIN_DIR=$(eval echo "$MAIN_DIR")
+
 # for VS Code support
 FMAN=($(xdg-mime query default inode/directory | sed 's/.desktop//'))
 # replace with whatever editor really
@@ -18,11 +25,9 @@ VSCODE_EDITOR_EXEC=vscodium
 
 SUBJECT="$1"
 year_now="$(date +%Y)"
-maindir="${CONFIG_FILE}${SUBJECT}/"
 
-#set_aliases=$(egrep "alias ")
-
-if [[ -d "$maindir" ]]; then
+if [[ -d "${MAIN_DIR}${SUBJECT}" ]]; then
+    maindir="${MAIN_DIR}${SUBJECT}"
     if [[ "$2" = du ]]; then
         if [[ -d "${maindir}du" ]]; then
             cd "${maindir}du"
@@ -70,10 +75,42 @@ if [[ -d "$maindir" ]]; then
     else
         echo "Error, invalid command!"
     fi
-elif [[ "$1" = "open" ]]; then
+elif [[ $1 = open ]]; then
     r=$($FMAN "$CONFIG_FILE" -- 2>&- 2<&-) & disown
 elif [[ $1 = alias ]]; then
-    echo "AAA"
+    if [[ $# -ne 3 ]]; then
+        echo "Format is \'alias name\' \'COMMAND\'!" >&2
+    else
+        cat "$CONFIG_DIR/muni-script"
+        echo "$2=$3" >> "$CONFIG_FILE"
+    fi
+elif [[ $1 = help ]]; then
+    cat <<EOF 
+This is a simple bash script to help with not needing to cd to my school directory on my system.
+To use:
+./dumuni.sh [COMMAND | ALIAS]
+./dumuni.sh SUBJECT_DIR_NAME [SUB_COMMAND] 
+
+If no command is set (./dumuni.sh <- without any params) then it will change the current directory there
+COMMAND:
+    help - this message
+    open - opens direcotry using a file manager set by xdg-mime
+    list - lists the directories inside school dir
+    alias - TODO, to set alias
+
+
+If no subcommand is set it will change directory to the subject directory
+SUB_COMMAND:
+    du - go into homework directory named du[YEAR] (from date +%Y)
+    files|f - list files inside the subject dir
+    list|l - list files and directories inside subject dir
+    open|o - open file manager in subject dir
+    vscode - open vscode inside subject dir (tries to also locate workspace)
+
+For any questions use github issues or contact me on matrix (@kadva7:matrix.org).
+EOF
 else
-    echo -e "Cannot find directory for specified subject!"
+    echo -e "Command does not exist or cannot find directory for specified subject!"
 fi
+
+set +e
