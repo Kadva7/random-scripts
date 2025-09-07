@@ -3,10 +3,11 @@
 # get directory from config
 # https://stackoverflow.com/questions/59895/how-do-i-get-the-directory-where-a-bash-script-is-located-from-within-the-script
 # what the hell is this abomination
-#set -e
 CONFIG_DIR="$HOME/.config/school-bash"
 #CONFIG_FILE="$($HOME/.config/school-bash/config.sh)"
 CONFIG_FILE="$CONFIG_DIR/config.conf"
+
+set -e
 
 source "$CONFIG_FILE"
 
@@ -26,8 +27,8 @@ VSCODE_EDITOR_EXEC=vscodium
 SUBJECT="$1"
 year_now="$(date +%Y)"
 
-if [[ -d "${MAIN_DIR}${SUBJECT}" ]]; then
-    maindir="${MAIN_DIR}${SUBJECT}"
+if [[ -d "${MAIN_DIR}/${SUBJECT}" ]]; then
+    maindir="${MAIN_DIR}/${SUBJECT}"
     if [[ "$2" = du ]]; then
         if [[ -d "${maindir}du" ]]; then
             cd "${maindir}du"
@@ -82,7 +83,7 @@ elif [[ $1 = alias ]]; then
         echo "Format is \'alias name\' \'COMMAND\'!" >&2
     else
         cat "$CONFIG_DIR/muni-script"
-        echo "$2=$3" >> "$CONFIG_FILE"
+        echo "alias_$2=$3" >> "$CONFIG_FILE"
     fi
 elif [[ $1 = help ]]; then
     cat <<EOF 
