@@ -32,8 +32,9 @@ then
 
         for $submission in $TO_SUBMIT
         do
+            if [ -z "$submission" ]; then continue; fi
             echo "Submitting $submission"
-            if [ -n "$submission" ] && ! $SUBJECT submit --wait "$submission"; then
+            if ! $SUBJECT submit --wait "$submission"; then
                 echo "Error while submitting, exiting…"
                 # break
                 exit 1
