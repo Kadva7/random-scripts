@@ -19,8 +19,8 @@
 SUBJECT='pb111'
 WEEK_REGEX='[0-1][0-9]'
 ASSIGNMENTS='s[1-3]_[a-f]_\w+'
-TO_SUBMIT_REGEX="($WEEK_REGEX|$ASSIGNMENTS)(\b+($WEEK_REGEX|$ASSIGNMENTS))*"
-ACTIVATE_FOR="submit\b$TO_SUBMIT_REGEX"
+TO_SUBMIT_REGEX="(\b+($WEEK_REGEX|$ASSIGNMENTS))+"
+ACTIVATE_FOR="submit$TO_SUBMIT_REGEX"
 LAST_COMMIT="$(git log -1 --online)"
 
 MATCH=$(grep -wEo "$ACTIVATE_FOR" "$LAST_COMMIT")
@@ -28,7 +28,7 @@ MATCH=$(grep -wEo "$ACTIVATE_FOR" "$LAST_COMMIT")
 if command -v "$SUBJECT" 2>&1 >/dev/null && [ -n "$MATCH" ]
 then
         # yes, sed can also be used, but grep is already smth used so, less deps
-        TO_SUBMIT=${grep -wEo "$MATCH"}
+        TO_SUBMIT=${grep -wEo "$TO_SUBMIT_REGEX" "$MATCH"}
 
         for $submission in $TO_SUBMIT
         do
